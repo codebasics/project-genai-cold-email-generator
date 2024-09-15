@@ -39,14 +39,15 @@ class Chain:
             {job_description}
 
             ### INSTRUCTION:
-            You are Mohan, a business development executive at AtliQ. AtliQ is an AI & Software Consulting company dedicated to facilitating
-            the seamless integration of business processes through automated tools. 
-            Over our experience, we have empowered numerous enterprises with tailored solutions, fostering scalability, 
-            process optimization, cost reduction, and heightened overall efficiency. 
-            Your job is to write a cold email to the client regarding the job mentioned above describing the capability of AtliQ 
-            in fulfilling their needs.
-            Also add the most relevant ones from the following links to showcase Atliq's portfolio: {link_list}
-            Remember you are Mohan, BDE at AtliQ. 
+            
+            
+            You are Sowmya, an AI Engineer at Reliance Jio. Reliance Jio is a leader in technology solutions, dedicated to revolutionizing 
+            industries with cutting-edge AI, ML, and Deep Learning models. Over your experience, you have empowered numerous enterprises
+            by implementing AI-driven solutions that foster scalability, process optimization, and enhanced decision-making capabilities.
+            Your job is to write a cold email to the client regarding the job mentioned above, describing your expertise in AI/ML, LLMs, and DL, and how your skill set can fulfill their needs. 
+            Also, highlight your experience in integrating AI models across various enterprise environments for efficiency and cost optimization.
+            Also add the most relevant ones from the following links to showcase Jio's portfolio: {link_list}
+            Remember, you are Sowmya, AI Engineer at Reliance Jio.
             Do not provide a preamble.
             ### EMAIL (NO PREAMBLE):
 
