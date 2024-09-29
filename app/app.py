@@ -13,7 +13,6 @@ import re
 load_dotenv()
 
 
-
 def clean_text(text):
     # Remove HTML tags
     text = re.sub(r'<[^>]*?>', '', text)
@@ -22,7 +21,7 @@ def clean_text(text):
     # Remove special characters
     text = re.sub(r'[^a-zA-Z0-9 ]', '', text)
     # Replace multiple spaces with a single space
-    text = re.sub(r'\s{2,}', ' ', text)
+    text = re.sub(r'\\s{2,}', ' ', text)
     # Trim leading and trailing whitespace
     text = text.strip()
     # Remove extra whitespace
@@ -34,6 +33,7 @@ def clean_text(text):
 class Chain:
     def __init__(self):
         self.llm = ChatGroq(temperature=0, groq_api_key=os.getenv("GROQ_API_KEY"), model_name="llama-3.1-70b-versatile")
+
 
     def extract_jobs(self, cleaned_text):
         prompt_extract = PromptTemplate.from_template(
@@ -56,6 +56,7 @@ class Chain:
             raise OutputParserException("Context too big. Unable to parse jobs.")
         return res if isinstance(res, list) else [res]
 
+
     def write_mail(self, job, links, user_name, user_about):
         prompt_email = PromptTemplate.from_template(
             """
@@ -68,6 +69,7 @@ class Chain:
             Also, add the most relevant ones from the following links to showcase portfolio: {link_list}
             Do not provide a preamble.
             ### EMAIL (NO PREAMBLE):
+
 
             """
         )
@@ -83,30 +85,35 @@ class Portfolio:
         if 'portfolio' not in st.session_state:
             st.session_state['portfolio'] = []
 
+
     def add_to_portfolio(self, skills, links):
         """Add the user's skills and portfolio links to temporary storage."""
         if skills and links:
             st.session_state['portfolio'].append({"skills": skills, "links": links})
 
+
     def query_links(self, required_skills):
         """Query the temporary storage for relevant links based on provided skills."""
         if not required_skills:
             return []
-        
+
+
         # Find relevant portfolio entries based on skills
         matched_links = []
         for entry in st.session_state['portfolio']:
             portfolio_skills = entry['skills']
             if any(skill in portfolio_skills for skill in required_skills):
                 matched_links.append(entry['links'])
-        
+
+
         return matched_links[:2]  # Return up to 2 matched links
 
 
 # Function to create the Streamlit app interface
 def create_streamlit_app(llm, portfolio, clean_text):
-    st.set_page_config(page_title="Cold Email Generator", page_icon="📧", layout="wide")
-    
+    st.set_page_config(page_title="Cold Email Generator", page_icon="", layout="wide")
+
+
     st.markdown("""
     <style>
         .main {
@@ -163,6 +170,12 @@ def create_streamlit_app(llm, portfolio, clean_text):
             border-radius: 5px;
             color: #e0e0e0;
         }
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
+        .stTextInput>div>div>textarea {min-height: 100px;}
+        .stButton>button {background-color: #007BFF;}
+        .stButton>button:hover {background-color: #0056b3;}
         .footer {
             text-align: center;
             color: #e0e0e0;
@@ -181,36 +194,46 @@ def create_streamlit_app(llm, portfolio, clean_text):
         }
     </style>
     """, unsafe_allow_html=True)
-    
-    st.markdown("<div class='title'>📧 Cold Email Generator</div>", unsafe_allow_html=True)
+
+
+    st.markdown("<div class='title'>Cold Email Generator</div>", unsafe_allow_html=True)
     st.markdown("<div class='subtitle'>Effortlessly craft professional cold emails for job applications based on job postings.</div>", unsafe_allow_html=True)
 
+
     st.markdown("<div class='container'>", unsafe_allow_html=True)
-    
+
+
     user_name = st.text_input("Enter your name:", value=" ")
     user_about = st.text_area(
-        "Enter a brief description about yourself:", 
+        "Enter a brief description about yourself:",
         value=" "
     )
 
+
     url_input = st.text_input("Enter a Job Post URL:", value=" ")
+
 
     st.subheader("Enter Your Skills and Portfolio Links")
     skills_input = st.text_area("Enter your skills (comma separated):", value="")
     links_input = st.text_area("Enter your portfolio links (comma separated):", value="")
 
+
     submit_button = st.button("Submit", key='submit_button', help="Click to generate the cold email")
+
 
     if submit_button:
         try:
             skills_list = [skill.strip() for skill in skills_input.split(",")]
             links_list = [link.strip() for link in links_input.split(",")]
 
+
             portfolio.add_to_portfolio(skills_list, links_list)
+
 
             loader = WebBaseLoader([url_input])
             data = clean_text(loader.load().pop().page_content)
             jobs = llm.extract_jobs(data)
+
 
             for job in jobs:
                 job_skills = job.get('skills', [])
@@ -218,16 +241,21 @@ def create_streamlit_app(llm, portfolio, clean_text):
                 email = llm.write_mail(job, links, user_name, user_about)
                 st.markdown(f"<div class='code-block'><pre>{email}</pre></div>", unsafe_allow_html=True)
 
+
         except Exception as e:
             st.error(f"An Error Occurred: {e}")
 
-    st.markdown("<div class='footer'>For any queries, reach me at: <a href='mailto:aicraftalchemy@gmail.com'>aicraftalchemy@gmail.com</a> | Phone: 7661081043</div>", unsafe_allow_html=True)
+
     st.markdown("</div>", unsafe_allow_html=True)
+
+
+    st.markdown("<div class='footer'>For any queries, reach me at: <a href='mailto:aicraftalchemy@gmail.com'>aicraftalchemy@gmail.com</a> | Phone: +917661081043</div>", unsafe_allow_html=True)
 
 
 # Main function to run the app
 if __name__ == "__main__":
     chain = Chain()
     portfolio = Portfolio()
+
 
     create_streamlit_app(chain, portfolio, clean_text)
