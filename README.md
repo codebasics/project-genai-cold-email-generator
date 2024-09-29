@@ -1,4 +1,5 @@
 **This project is live at:** https://genai-cold-email-generator-aicraftalchemy.streamlit.app/
+
 I have modified the code for the dynamic input from the user and  deployed in streamlit community so that everyone can use the application.
 
 This Project is forked from: https://github.com/codebasics/project-genai-cold-email-generator
