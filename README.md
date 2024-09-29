@@ -5,7 +5,7 @@ I have modified the code for the dynamic input from the user and  deployed in st
 
 
 
-#The above is the output I have modified
+# The above is the output I have modified
 
 This Project is forked from: https://github.com/codebasics/project-genai-cold-email-generator 
 Credits: https://github.com/codebasics
