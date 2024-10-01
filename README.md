@@ -1,3 +1,16 @@
+**This project is live at:** https://genai-cold-email-generator-aicraftalchemy.streamlit.app/
+
+I have modified the code for the dynamic input from the user and  deployed in streamlit community so that everyone can use the application.
+![img.png](imgs/img1.png)
+
+
+
+# The above is the output I have modified
+
+This Project is forked from: https://github.com/codebasics/project-genai-cold-email-generator 
+
+Credits: https://github.com/codebasics
+
 # 📧 Cold Mail Generator
 Cold email generator for services company using groq, langchain and streamlit. It allows users to input the URL of a company's careers page. The tool then extracts job listings from that page and generates personalized cold emails. These emails include relevant portfolio links sourced from a vector database, based on the specific job descriptions. 
 
